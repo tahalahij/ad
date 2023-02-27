@@ -12,29 +12,29 @@ type FileTypeDetectorProps ={
 } & ScreenItem;
 
 export const FileTypeDetector: FC<FileTypeDetectorProps> = ({
-  uri,
-  fileName,
-  fileType,
-  onScreenDuration,
+  path,
+  _id,
+  type,
+  delay,
   onEnd,
 }) => {
   //@ts-ignore
-  const _fileType: "image" | "video" | "music" = fileType!;
+  const _fileType: "image" | "video" | "audio" = type!;
 
   if (_fileType === "image") {
     return (
-      <ScheduledComponent duration={onScreenDuration!} onEnd={onEnd}>
-        <ImageViewer uri={uri} />;
+      <ScheduledComponent duration={delay!} onEnd={onEnd}>
+        <ImageViewer uri={path} />;
       </ScheduledComponent>
     );
   }
 
-  if (_fileType === "music") {
-    return <MusicPlayer uri={uri} onEnd={onEnd} />;
+  if (_fileType === "audio") {
+    return <MusicPlayer uri={path} onEnd={onEnd} />;
   }
 
   if (_fileType === "video") {
-    return <VideoPlayer uri={uri} onEnd={onEnd} />;
+    return <VideoPlayer uri={path} onEnd={onEnd} />;
   }
 
   return null;

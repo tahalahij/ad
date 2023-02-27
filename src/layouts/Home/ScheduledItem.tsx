@@ -25,7 +25,7 @@ export const ScheduledItem: FC<ScheduledItemProps> = ({ item, onEnd }) => {
         alignItems: 'center',
       }}
     >
-      <FileTypeDetector onEnd={() => onEnd(item.objectId)} {...item} />
+      <FileTypeDetector onEnd={() => onEnd(item._id)} {...item} />
     </Paper>
   );
 };

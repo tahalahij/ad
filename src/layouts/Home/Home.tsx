@@ -13,20 +13,21 @@ import { ScreenItem } from "../../types";
 type HomeProps = {};
 
 export const Home: FC<HomeProps> = () => {
-  const { data, error, loading, clearError } = useFetchSchedules();
+  const { data, error, loading, clearError, fetchData } = useFetchSchedules();
   const [currentItem, setCurrentItem] = useState<ScreenItem>();
 
   useEffect(() => {
-    setCurrentItem(data[0]);
-  }, [data]);
+    setCurrentItem(data);
+  }, [data?._id]);
 
-  const onEnd = (objectId: string) => {
-    const index = data.findIndex((value) => value.objectId === objectId);
-    if (index < data.length - 1) {
-      setCurrentItem(data[index + 1]);
-    } else {
-      setCurrentItem(data[0]);
-    }
+  const onEnd = (id: string) => {
+    // const index = data.findIndex((value) => value.id === id);
+    // if (index < data.length - 1) {
+    //   setCurrentItem(data[index + 1]);
+    // } else {
+    //   setCurrentItem(data[0]);
+    // }
+    fetchData();
   };
 
   return (
