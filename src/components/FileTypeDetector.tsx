@@ -23,16 +23,16 @@ export const FileTypeDetector: FC<FileTypeDetectorProps> = ({
 }) => {
   //@ts-ignore
   const _fileType: "image" | "video" | "audio" = type!;
+  const uri = encodeURI(BASE_API_URL + "files/download/stream/" + name);
 
   if (_fileType === "image") {
     return (
       <ScheduledComponent duration={delay!} resetKey={resetKey!} onEnd={onEnd}>
-        <ImageViewer uri={path} />;
+        <ImageViewer uri={uri} />;
       </ScheduledComponent>
     );
   }
 
-  const uri = encodeURI(BASE_API_URL + "files/download/stream/" + name);
   if (_fileType === "audio") {
     return <MusicPlayer resetKey={resetKey!} uri={uri} onEnd={onEnd} />;
   }
