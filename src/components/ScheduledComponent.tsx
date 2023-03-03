@@ -4,12 +4,14 @@ type ScheduledComponentProps = {
   children: ReactNode;
   onEnd: () => void;
   duration: number;
+  resetKey: string,
 };
 
 export const ScheduledComponent: FC<ScheduledComponentProps> = ({
   children,
   onEnd,
   duration,
+  resetKey,
   ...props
 }) => {
   useEffect(() => {
@@ -21,7 +23,7 @@ export const ScheduledComponent: FC<ScheduledComponentProps> = ({
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [duration]);
+  }, [duration, resetKey]);
 
   return <>{children}</>;
 };

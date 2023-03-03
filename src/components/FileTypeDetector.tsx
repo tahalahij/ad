@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { BASE_API_URL } from "../network/Constants";
 import { ScreenItem } from "../types";
 import {
   ImageViewer,
@@ -7,15 +8,17 @@ import {
   VideoPlayer,
 } from "./index";
 
-type FileTypeDetectorProps ={
-    onEnd: () => void
+type FileTypeDetectorProps = {
+  onEnd: () => void;
 } & ScreenItem;
 
 export const FileTypeDetector: FC<FileTypeDetectorProps> = ({
   path,
+  name,
   _id,
   type,
   delay,
+  resetKey,
   onEnd,
 }) => {
   //@ts-ignore
@@ -23,18 +26,19 @@ export const FileTypeDetector: FC<FileTypeDetectorProps> = ({
 
   if (_fileType === "image") {
     return (
-      <ScheduledComponent duration={delay!} onEnd={onEnd}>
+      <ScheduledComponent duration={delay!} resetKey={resetKey!} onEnd={onEnd}>
         <ImageViewer uri={path} />;
       </ScheduledComponent>
     );
   }
 
+  const uri = encodeURI(BASE_API_URL + "files/download/stream/" + name);
   if (_fileType === "audio") {
-    return <MusicPlayer uri={path} onEnd={onEnd} />;
+    return <MusicPlayer resetKey={resetKey!} uri={uri} onEnd={onEnd} />;
   }
 
   if (_fileType === "video") {
-    return <VideoPlayer uri={path} onEnd={onEnd} />;
+    return <VideoPlayer resetKey={resetKey!} uri={uri} onEnd={onEnd} />;
   }
 
   return null;

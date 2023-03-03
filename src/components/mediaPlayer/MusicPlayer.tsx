@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
@@ -7,11 +7,19 @@ import PauseCircle from "@mui/icons-material/PauseCircle";
 
 type MusicPlayerType = {
   uri: string;
+  resetKey: string;
   onEnd: () => void;
 };
 
-export const MusicPlayer: FC<MusicPlayerType> = ({ uri, onEnd }) => {
+export const MusicPlayer: FC<MusicPlayerType> = ({ uri, resetKey, onEnd }) => {
   //   const [isPlaying, togglePlay] = useAudio(uri);
+  const ref = useRef<HTMLAudioElement>(null);
+  useEffect(() => {
+    ref.current?.pause();
+    ref.current?.load();
+    ref.current?.play();
+  }, [resetKey]);
+
   return (
     <Box
       sx={{
@@ -31,9 +39,9 @@ export const MusicPlayer: FC<MusicPlayerType> = ({ uri, onEnd }) => {
               {isPlaying ? <PauseCircle /> : <PlayArrow />}
             </IconButton>
           </div> */}
-      <audio controls autoPlay={true} onEnded={onEnd}>
+      <audio controls autoPlay={true} onEnded={onEnd} ref={ref}>
         <source src={uri} type="audio/mp3" />
-        Sorry, your browser doesn't support videos.
+        Sorry, your browser doesn't support audio.
       </audio>
     </Box>
   );

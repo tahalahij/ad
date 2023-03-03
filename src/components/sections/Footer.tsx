@@ -7,7 +7,7 @@ export const Footer = () => {
     <footer
       style={{
         width: "100vw",
-        height: "100px",
+        height: "50px",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
@@ -17,7 +17,7 @@ export const Footer = () => {
       {/* <Container maxWidth="lg" style={{ backgroundColor: "red" }}> */}
       {/* <Box sx={{ bgcolor: "#AfF8fc", height: "100%" }}> */}
       <Typography variant="body1">
-        فوتر
+        {''}
       </Typography>
       {/* </Box> */}
       {/* </Container> */}

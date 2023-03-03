@@ -29,14 +29,15 @@ export const useFetchSchedules = () => {
 
   const fetchData = async () => {
     try {
-      if (!data) {
-        setLoading(true);
-        const response = await getFilesListRequest();
-        if (response.success) {
-          setData(response.payload);
-        }
-        setLoading(false);
+      setLoading(true);
+      const response = await getFilesListRequest();
+      if (response.success) {
+        setData({ ...response.payload!, resetKey: Date.now().toString() });
+      } else if (!!data) {
+        // to replay last item
+        setData({...data, resetKey: Date.now().toString()})
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
