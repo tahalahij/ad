@@ -9,5 +9,5 @@ type fileListParamsReq = {
 };
 
 export const getFilesListRequest = async () => {
-  return NetworkHandler.get<ScreenItem>(`schedule/schedule`, {});
+  return NetworkHandler.get<ScreenItem>(`schedule`, {});
 };
