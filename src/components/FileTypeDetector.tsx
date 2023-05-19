@@ -28,7 +28,7 @@ export const FileTypeDetector: FC<FileTypeDetectorProps> = ({
   if (_fileType === "image") {
     return (
       <ScheduledComponent duration={delay!} resetKey={resetKey!} onEnd={onEnd}>
-        <ImageViewer uri={uri} />;
+        <ImageViewer uri={uri} />
       </ScheduledComponent>
     );
   }
