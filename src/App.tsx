@@ -14,9 +14,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <Header />
+        {/* <Header /> */}
         <Home />
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </ThemeProvider>
   );

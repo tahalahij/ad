@@ -15,17 +15,17 @@ export const ScheduledItem: FC<ScheduledItemProps> = ({ item, onEnd }) => {
   //   const item = useData(objectId);
 
   return (
-    <Paper
-      variant="outlined"
-      square
+    <div
+      // variant="outlined"
+      // square
       style={{
         flex: 1,
         height: "100%",
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <FileTypeDetector onEnd={() => onEnd(item._id)} {...item} />
-    </Paper>
+    </div>
   );
 };

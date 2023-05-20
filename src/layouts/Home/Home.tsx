@@ -31,10 +31,10 @@ export const Home: FC<HomeProps> = () => {
   };
 
   return (
-    <Container maxWidth="xl" style={{ height: "100%" }}>
+    <Container maxWidth="xl" style={{ height: "100%", padding: 0 }}>
       {currentItem ? <ScheduledItem item={currentItem} onEnd={onEnd} /> : null}
       <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: "#322", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
       >
         <CircularProgress color="inherit" />
