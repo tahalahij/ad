@@ -1,6 +1,6 @@
 import "./App.css";
 import "vazirmatn/Vazirmatn-font-face.css";
-import { Header, Footer } from "./components";
+// import { Header, Footer } from "./components";
 import { Home } from "./layouts/Home";
 import { createTheme, ThemeProvider } from "@mui/material";
 

@@ -1,8 +1,4 @@
 import { FC } from "react";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import Paper from "@mui/material/Paper";
-import Container from "@mui/material/Container";
 import { FileTypeDetector } from "../../components";
 import { ScreenItem } from "../../types";
 
