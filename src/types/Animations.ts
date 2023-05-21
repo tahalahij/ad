@@ -1,0 +1,18 @@
+export type ImageAnimation =
+  | "none"
+  | "zoom"
+  | "fade-left"
+  | "fade-right"
+  | "fade-top"
+  | "fade-bottom"
+  | "fade"
+  | "flip-left"
+  | "flip-right"
+  | "flip-top"
+  | "flip-bottom"
+  | "rotate"
+  | "bounce"
+  | "bounce-left"
+  | "bounce-right"
+  | "bounce-top"
+  | "bounce-bottom";
