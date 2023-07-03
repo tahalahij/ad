@@ -8,12 +8,14 @@ import Alert from "@mui/material/Alert";
 import { useFetchSchedules } from "./useData";
 import { ScheduledItem } from "./ScheduledItem";
 import { ScreenItem } from "../../types";
+import { useAzan } from "../../components/azan/useAzan";
 
 type HomeProps = {};
 
 export const Home: FC<HomeProps> = () => {
   const { data, error, loading, clearError, fetchData } = useFetchSchedules();
   const [currentItem, setCurrentItem] = useState<ScreenItem>();
+  const azan = useAzan();
 
   useEffect(() => {
     setCurrentItem(data);
@@ -37,7 +39,7 @@ export const Home: FC<HomeProps> = () => {
         sx={{ color: "#322", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
       >
-        <CircularProgress color="inherit" />
+        <CircularProgress color="info" />
       </Backdrop>
       <Snackbar
         open={!!error}
