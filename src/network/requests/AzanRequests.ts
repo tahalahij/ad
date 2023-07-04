@@ -8,3 +8,7 @@ export const getAzanTimeRequest = async () => {
     azanDurationInSec: number;
   }>(`schedule/azan-time`);
 };
+
+export const getAzanScheduleRequest = async () => {
+  return NetworkHandler.get<any>(`schedule/azan`);
+};

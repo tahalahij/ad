@@ -15,12 +15,16 @@ type HomeProps = {};
 export const Home: FC<HomeProps> = () => {
   const { data, error, loading, clearError, fetchData } = useFetchSchedules();
   const [currentItem, setCurrentItem] = useState<ScreenItem>();
-  const azan = useAzan();
+  const { azanItem } = useAzan();
 
   useEffect(() => {
     setCurrentItem(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.resetKey]);
+
+  useEffect(() => {
+    setCurrentItem(azanItem);
+  }, [azanItem?.resetKey]);
 
   const onEnd = (id: string) => {
     // const index = data.findIndex((value) => value.id === id);
