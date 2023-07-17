@@ -3,7 +3,9 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Snackbar from "@mui/material/Snackbar";
+import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+import Typography from "@mui/material/Typography";
 
 import { useFetchSchedules } from "./useData";
 import { ScheduledItem } from "./ScheduledItem";
@@ -13,6 +15,7 @@ import { useAzan } from "../../components/azan/useAzan";
 type HomeProps = {};
 
 export const Home: FC<HomeProps> = () => {
+  const [interaction, setInteraction] = useState(false);
   const { data, error, loading, clearError, fetchData } = useFetchSchedules();
   const [currentItem, setCurrentItem] = useState<ScreenItem>();
   const { azanItem } = useAzan();
@@ -38,12 +41,35 @@ export const Home: FC<HomeProps> = () => {
 
   return (
     <Container maxWidth="xl" style={{ height: "100%", padding: 0 }}>
-      {currentItem ? <ScheduledItem item={currentItem} onEnd={onEnd} /> : null}
+      {currentItem && interaction ? (
+        <ScheduledItem item={currentItem} onEnd={onEnd} />
+      ) : null}
       <Backdrop
         sx={{ color: "#322", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
+        open={loading || !interaction}
       >
-        <CircularProgress color="info" />
+        {!interaction && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+              flexDirection: "column",
+              gap: "20px",
+            }}
+          >
+            <Typography color={"#FFF"}>برای شروع پخش کلیک کنید</Typography>
+            <Button
+              variant="contained"
+              onClick={() => setInteraction(true)}
+              // startIcon={<MdAdd />}
+            >
+              شروع پخش
+            </Button>
+          </div>
+        )}
+        {loading && <CircularProgress color="info" />}
       </Backdrop>
       <Snackbar
         open={!!error}
