@@ -12,7 +12,15 @@ export const useAzan = () => {
   const fetchAzanSchedule = async (retryCount: number = 1) => {
     getAzanTimeRequest()
       .then((res) => {
-        setTimes(res.payload?.azans!);
+        if (res.success) {
+          setTimes(res.payload?.azans!);
+        } else {
+          if (retryCount <= MAX_RETRY_COUNT) {
+            setTimeout(() => {
+              fetchAzanSchedule(retryCount + 1);
+            }, retryCount * 1000);
+          }
+        }
       })
       .catch(() => {
         if (retryCount <= MAX_RETRY_COUNT) {
