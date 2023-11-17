@@ -3,6 +3,7 @@ import "vazirmatn/Vazirmatn-font-face.css";
 // import { Header, Footer } from "./components";
 import { Home } from "./layouts/Home";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { useSocket } from "./network/socket/useSocket";
 
 const theme = createTheme({
   typography: {
@@ -11,6 +12,9 @@ const theme = createTheme({
 });
 
 function App() {
+
+  const isOnline = useSocket();
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
