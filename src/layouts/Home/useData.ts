@@ -34,8 +34,8 @@ export const useFetchSchedules = () => {
       if (response.success) {
         setData({ ...response.payload!, resetKey: Date.now().toString() });
       } else if (!!data) {
-        // to replay last item
-        setData({...data, resetKey: Date.now().toString()})
+        // to not replay last item
+        setData(undefined)
       }
       setLoading(false);
     } catch (error) {
