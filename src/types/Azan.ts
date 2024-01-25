@@ -1,7 +1,10 @@
 export enum AzanTypeEnum {
-  SUNRISE = "SUNRISE",
-  NOON = "NOON",
-  VESPER = "VESPER",
+  SUNRISE = 'SUNRISE',
+  NOON = 'NOON', //azan
+  VESPER = 'VESPER',//azan
+  DAWN_PRAYER = 'DAWN_PRAYER',//azan
+  SUNSET = 'SUNSET',
+  MIDNIGHT = 'MIDNIGHT',
 }
 
 export type AzanTime = {

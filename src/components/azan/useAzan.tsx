@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAzanTimeRequest } from "../../network/requests";
-import { AzanTime, ScreenItem } from "../../types";
+import { AzanTime, AzanTypeEnum, ScreenItem } from "../../types";
 import { BASE_API_URL } from "../../network/Constants";
 
 const MAX_RETRY_COUNT = 10;
@@ -13,7 +13,15 @@ export const useAzan = () => {
     getAzanTimeRequest()
       .then((res) => {
         if (res.success) {
-          setTimes(res.payload?.azans!);
+          setTimes(
+            res.payload!.azans.filter((value) => {
+              return (
+                value.type === AzanTypeEnum.DAWN_PRAYER ||
+                value.type === AzanTypeEnum.NOON ||
+                value.type === AzanTypeEnum.VESPER
+              );
+            })
+          );
         } else {
           if (retryCount <= MAX_RETRY_COUNT) {
             setTimeout(() => {
