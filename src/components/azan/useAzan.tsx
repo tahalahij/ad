@@ -13,15 +13,7 @@ export const useAzan = () => {
     getAzanTimeRequest()
       .then((res) => {
         if (res.success) {
-          setTimes(
-            res.payload!.azans.filter((value) => {
-              return (
-                value.type === AzanTypeEnum.DAWN_PRAYER ||
-                value.type === AzanTypeEnum.NOON ||
-                value.type === AzanTypeEnum.VESPER
-              );
-            })
-          );
+          setTimes(res.payload?.azans!);
         } else {
           if (retryCount <= MAX_RETRY_COUNT) {
             setTimeout(() => {
@@ -50,18 +42,25 @@ export const useAzan = () => {
       const now = new Date();
       now.setMilliseconds(0);
       if (
-        now.getHours() == 0 &&
-        now.getMinutes() == 0 &&
-        now.getSeconds() == 0
+        now.getHours() === 0 &&
+        now.getMinutes() === 0 &&
+        now.getSeconds() === 0
       ) {
         // refetch schedule every day
         fetchAzanSchedule(1);
       }
       if (times.length > 0) {
-        times.forEach((time) => {
+        times.filter((value) => {
+          return (
+            value.type === AzanTypeEnum.DAWN_PRAYER ||
+            value.type === AzanTypeEnum.NOON ||
+            value.type === AzanTypeEnum.VESPER
+          );
+        }).forEach((time) => {
           const azanDate = new Date(time.start);
           azanDate.setMilliseconds(0);
 
+          // TODO: check with backend diff
           if (azanDate.valueOf() === now.valueOf()) {
             // change current playing item
             fetch(BASE_API_URL + "files/download/azan", { method: "HEAD" })
