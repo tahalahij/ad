@@ -13,7 +13,11 @@ import { ScheduledItem } from "./ScheduledItem";
 import { ScreenItem } from "../../types";
 import { useAzan } from "../../components/azan/useAzan";
 import { ReligiousTimesBackground } from "../../assets/images";
-import { ConvertToArabicNumbers, twoDigitIt } from "../../utils/helpers";
+import {
+  ConvertToArabicNumbers,
+  convertDateToPersian,
+  twoDigitIt,
+} from "../../utils/helpers";
 
 type HomeProps = {};
 
@@ -106,13 +110,13 @@ export const Home: FC<HomeProps> = () => {
           <Typography variant="h4" color={"white"} sx={{ mt: "8ch" }}>
             اوقات شرعی
           </Typography>
-          {/* <Typography
+          <Typography
             variant="h6"
             color={"white"}
             sx={{ mt: "4ch", mb: "2ch" }}
           >
-            {`{dayofweek} چندم ماه `}
-          </Typography> */}
+            {`${convertDateToPersian(sortedAzanTimes[0]?.start)}`}
+          </Typography>
           {sortedAzanTimes.map((t) => {
             const startTime = new Date(t.start);
             return (
