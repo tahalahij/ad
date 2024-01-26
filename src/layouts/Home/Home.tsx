@@ -13,7 +13,7 @@ import { ScheduledItem } from "./ScheduledItem";
 import { ScreenItem } from "../../types";
 import { useAzan } from "../../components/azan/useAzan";
 import { ReligiousTimesBackground } from "../../assets/images";
-import { ConvertToArabicNumbers } from "../../utils/helpers";
+import { ConvertToArabicNumbers, twoDigitIt } from "../../utils/helpers";
 
 type HomeProps = {};
 
@@ -42,8 +42,22 @@ export const Home: FC<HomeProps> = () => {
     fetchData();
   };
 
+  const sortedAzanTimes = azanTimes.sort((a, b) => {
+    // Turn your strings into dates, and then subtract them
+    // to get a value that is either negative, positive, or zero.
+    return new Date(a.start).valueOf() - new Date(b.start).valueOf();
+  });
+
   return (
-    <Container maxWidth="xl" style={{ height: "100%", padding: 0, display: 'flex', flexDirection: 'row' }}>
+    <Container
+      maxWidth="xl"
+      style={{
+        height: "100%",
+        padding: 0,
+        display: "flex",
+        flexDirection: "row",
+      }}
+    >
       <Box
         sx={{
           width: "34ch",
@@ -89,14 +103,17 @@ export const Home: FC<HomeProps> = () => {
             alignItems: "center",
           }}
         >
-          <Typography
-            variant="h4"
-            color={"white"}
-            sx={{ mt: "8ch", mb: "6ch" }}
-          >
+          <Typography variant="h4" color={"white"} sx={{ mt: "8ch" }}>
             اوقات شرعی
           </Typography>
-          {azanTimes.map((t) => {
+          {/* <Typography
+            variant="h6"
+            color={"white"}
+            sx={{ mt: "4ch", mb: "2ch" }}
+          >
+            {`{dayofweek} چندم ماه `}
+          </Typography> */}
+          {sortedAzanTimes.map((t) => {
             const startTime = new Date(t.start);
             return (
               <div
@@ -111,7 +128,9 @@ export const Home: FC<HomeProps> = () => {
               >
                 <Typography variant="subtitle1" color={"white"}>
                   {ConvertToArabicNumbers(
-                    `${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getSeconds()}`
+                    `${twoDigitIt(startTime.getHours())}:${twoDigitIt(
+                      startTime.getMinutes()
+                    )}:${twoDigitIt(startTime.getSeconds())}`
                   )}
                 </Typography>
                 <Typography variant="subtitle1" color={"white"}>

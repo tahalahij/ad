@@ -5,3 +5,9 @@ export function ConvertToArabicNumbers(num: string) {
     return arabicNumbers[Number(d)];
   });
 };
+
+
+export function twoDigitIt(num: string | number) {
+  const value = Number(num);
+  return value < 10 ? `0${num}` : value
+}
