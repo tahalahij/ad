@@ -93,5 +93,24 @@ export const useAzan = () => {
     };
   }, [times]);
 
-  return { azanItem };
+  const getPersianNameByType = (type: AzanTypeEnum) => {
+    switch (type) {
+      case AzanTypeEnum.SUNRISE:
+        return 'طلوع آفتاب';
+      case AzanTypeEnum.DAWN_PRAYER:
+        return 'اذان صبح';
+      case AzanTypeEnum.NOON:
+        return 'اذان ظهر';
+      case AzanTypeEnum.SUNSET:
+        return 'غروب آفتاب';
+      case AzanTypeEnum.VESPER:
+        return 'اذان مغرب';
+      case AzanTypeEnum.MIDNIGHT:
+        return 'نیمه شب شرعی';
+      default:
+        return ''
+    }
+  }
+
+  return { azanItem, times, getPersianNameByType };
 };

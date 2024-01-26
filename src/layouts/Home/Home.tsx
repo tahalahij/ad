@@ -6,11 +6,14 @@ import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 import { useFetchSchedules } from "./useData";
 import { ScheduledItem } from "./ScheduledItem";
 import { ScreenItem } from "../../types";
 import { useAzan } from "../../components/azan/useAzan";
+import { ReligiousTimesBackground } from "../../assets/images";
+import { ConvertToArabicNumbers } from "../../utils/helpers";
 
 type HomeProps = {};
 
@@ -18,7 +21,7 @@ export const Home: FC<HomeProps> = () => {
   const [interaction, setInteraction] = useState(false);
   const { data, error, loading, clearError, fetchData } = useFetchSchedules();
   const [currentItem, setCurrentItem] = useState<ScreenItem>();
-  const { azanItem } = useAzan();
+  const { azanItem, times: azanTimes, getPersianNameByType } = useAzan();
 
   useEffect(() => {
     setCurrentItem(data);
@@ -40,7 +43,85 @@ export const Home: FC<HomeProps> = () => {
   };
 
   return (
-    <Container maxWidth="xl" style={{ height: "100%", padding: 0 }}>
+    <Container maxWidth="xl" style={{ height: "100%", padding: 0, display: 'flex', flexDirection: 'row' }}>
+      <Box
+        sx={{
+          width: "34ch",
+          height: "100%",
+          overflow: "hidden",
+          display: "flex",
+        }}
+      >
+        <img
+          src={ReligiousTimesBackground}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            objectPosition: "left top",
+          }}
+          alt={"item.title"}
+          loading="lazy"
+        />
+        <div
+          style={{
+            zIndex: 2,
+            width: "inherit",
+            height: "70%",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(255,255,255,0) 30%,rgba(25,25,25,1) 50%)",
+          }}
+        />
+        <div
+          style={{
+            zIndex: 3,
+            width: "inherit",
+            height: "100%",
+            backgroundColor: "rgba(22, 22, 64, 0.1)",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant="h4"
+            color={"white"}
+            sx={{ mt: "8ch", mb: "6ch" }}
+          >
+            اوقات شرعی
+          </Typography>
+          {azanTimes.map((t) => {
+            const startTime = new Date(t.start);
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "80%",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 16,
+                }}
+              >
+                <Typography variant="subtitle1" color={"white"}>
+                  {ConvertToArabicNumbers(
+                    `${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getSeconds()}`
+                  )}
+                </Typography>
+                <Typography variant="subtitle1" color={"white"}>
+                  {getPersianNameByType(t.type)}
+                </Typography>
+              </div>
+            );
+          })}
+        </div>
+      </Box>
       {currentItem && interaction ? (
         <ScheduledItem item={currentItem} onEnd={onEnd} />
       ) : null}
