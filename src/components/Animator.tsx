@@ -34,7 +34,6 @@ export const Animator = ({
   if (animation.split("-").length > 1) {
     //@ts-ignore
     props[animation.split("-")[1]] = true;
-    console.log(props);
   }
 
   return <Wrapper {...props} key={animation}>{children}</Wrapper>;

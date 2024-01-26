@@ -13,7 +13,7 @@ export const ImageViewer: FC<ImageViewerType> = ({
 }) => {
   return (
     <Animator animation={animation}>
-      <div style={{ flex: 1, width: "100%", height: "100%" }}>
+      <div style={{ display: "flex", flex: 1, width: "100%", height: "100%" }}>
         <img
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
           src={uri}
