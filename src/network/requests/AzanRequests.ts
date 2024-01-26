@@ -6,6 +6,7 @@ export const getAzanTimeRequest = async () => {
   return NetworkHandler.get<{
     azans: AzanTime[];
     azanDurationInSec: number;
+    milisecToNextAzan: null | number;
   }>(`schedule/azan-time`);
 };
 

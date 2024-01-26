@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAzanTimeRequest } from "../../network/requests";
 import { AzanTime, AzanTypeEnum, ScreenItem } from "../../types";
 import { BASE_API_URL } from "../../network/Constants";
@@ -9,11 +9,49 @@ export const useAzan = () => {
   const [times, setTimes] = useState<AzanTime[]>([]);
   const [azanItem, setAzanItem] = useState<ScreenItem>();
 
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const fetchAzanContentToPlay = () => {
+    fetch(BASE_API_URL + "files/download/azan", { method: "HEAD" })
+      .then((response) => {
+        setAzanItem(
+          new ScreenItem(
+            "azan_id",
+            0,
+            "",
+            "azan",
+            new Date().toString(),
+            null,
+            "APP_ID",
+            response.headers.get("Content-Type")?.startsWith("audio")
+              ? "audio"
+              : "video",
+            0,
+            "azan-" + Date.now()
+          )
+        );
+        fetchAzanSchedule(1)
+      })
+      .catch();
+  };
+
   const fetchAzanSchedule = async (retryCount: number = 1) => {
     getAzanTimeRequest()
       .then((res) => {
         if (res.success) {
+          // clear last azan timeout
+          clearTimeout(timeoutRef.current);
           setTimes(res.payload?.azans!);
+
+          // create timeout to stream the upcoming azan by server diff
+          if (res.payload?.milisecToNextAzan) {
+            timeoutRef.current = setTimeout(() => {
+              fetchAzanContentToPlay();
+            }, res.payload.milisecToNextAzan);
+          } else {
+            // last azan is played and we should wait for next day refetch in the interval effect
+            clearTimeout(timeoutRef.current);
+          }
         } else {
           if (retryCount <= MAX_RETRY_COUNT) {
             setTimeout(() => {
@@ -34,6 +72,10 @@ export const useAzan = () => {
   useEffect(() => {
     // fetch schedule at first load
     fetchAzanSchedule(1);
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -49,43 +91,6 @@ export const useAzan = () => {
         // refetch schedule every day
         fetchAzanSchedule(1);
       }
-      if (times.length > 0) {
-        times.filter((value) => {
-          return (
-            value.type === AzanTypeEnum.DAWN_PRAYER ||
-            value.type === AzanTypeEnum.NOON ||
-            value.type === AzanTypeEnum.VESPER
-          );
-        }).forEach((time) => {
-          const azanDate = new Date(time.start);
-          azanDate.setMilliseconds(0);
-
-          // TODO: check with backend diff
-          if (azanDate.valueOf() === now.valueOf()) {
-            // change current playing item
-            fetch(BASE_API_URL + "files/download/azan", { method: "HEAD" })
-              .then((response) => {
-                setAzanItem(
-                  new ScreenItem(
-                    "azan_id",
-                    0,
-                    "",
-                    "azan",
-                    new Date().toString(),
-                    null,
-                    "APP_ID",
-                    response.headers.get("Content-Type")?.startsWith("audio")
-                      ? "audio"
-                      : "video",
-                    0,
-                    "azan-" + Date.now()
-                  )
-                );
-              })
-              .catch();
-          }
-        });
-      }
     }, 1000);
 
     return () => {
@@ -96,21 +101,21 @@ export const useAzan = () => {
   const getPersianNameByType = (type: AzanTypeEnum) => {
     switch (type) {
       case AzanTypeEnum.SUNRISE:
-        return 'طلوع آفتاب';
+        return "طلوع آفتاب";
       case AzanTypeEnum.DAWN_PRAYER:
-        return 'اذان صبح';
+        return "اذان صبح";
       case AzanTypeEnum.NOON:
-        return 'اذان ظهر';
+        return "اذان ظهر";
       case AzanTypeEnum.SUNSET:
-        return 'غروب آفتاب';
+        return "غروب آفتاب";
       case AzanTypeEnum.VESPER:
-        return 'اذان مغرب';
+        return "اذان مغرب";
       case AzanTypeEnum.MIDNIGHT:
-        return 'نیمه شب شرعی';
+        return "نیمه شب شرعی";
       default:
-        return ''
+        return "";
     }
-  }
+  };
 
   return { azanItem, times, getPersianNameByType };
 };
