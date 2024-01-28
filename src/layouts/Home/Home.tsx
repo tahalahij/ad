@@ -53,12 +53,12 @@ export const Home: FC<HomeProps> = () => {
   });
 
   return (
-    <Container
-      maxWidth="xl"
+    <Box
       style={{
         height: "100%",
         padding: 0,
         display: "flex",
+        flex: 1,
         flexDirection: "row",
       }}
     >
@@ -89,8 +89,7 @@ export const Home: FC<HomeProps> = () => {
             position: "absolute",
             bottom: 0,
             left: 0,
-            backgroundImage:
-              "linear-gradient(to bottom, rgba(255,255,255,0) 30%,rgba(25,25,25,1) 50%)",
+            backgroundImage: "linear-gradient(rgba(255, 255, 255, 0) 5%, rgb(25, 25, 25) 20%)",
           }}
         />
         <div
@@ -186,6 +185,6 @@ export const Home: FC<HomeProps> = () => {
           {error}
         </Alert>
       </Snackbar>
-    </Container>
+    </Box>
   );
 };
