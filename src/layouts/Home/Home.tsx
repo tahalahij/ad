@@ -24,8 +24,10 @@ type HomeProps = {
 
 export const Home: FC<HomeProps> = ({ shouldRefetchSchedule }) => {
   const [interaction, setInteraction] = useState(false);
-  const { data, error, loading, clearError, fetchData } = useFetchSchedules();
   const [currentItem, setCurrentItem] = useState<ScreenItem>();
+  const { data, error, loading, clearError, fetchData } = useFetchSchedules(
+    currentItem?.resetKey?.startsWith("azan")
+  );
   const { azanItem, times: azanTimes, getPersianNameByType } = useAzan();
 
   useEffect(() => {

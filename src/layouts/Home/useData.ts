@@ -1,30 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getFilesListRequest } from "../../network/requests";
 import { ScreenItem } from "../../types";
 
-const FAKE_DATA: Array<ScreenItem> = [];
+const retryInterval =
+  parseInt(process.env.REACT_APP_NO_SCHEDULE_RETRY_MINUTE!, 10) * 60 * 1000;
 
-export const useData = (data: ScreenItem[], id: string) => {
-  const [currentItem, setCurrentItem] = useState<ScreenItem>();
-
-  // useEffect(() => {
-  //   //fake fetch
-  //   const index = data.findIndex((item) => item.id === id);
-  //   setCurrentItem(data[index]);
-  //   // setTimeout(() => {
-  //   // }, 5000);
-  // }, [id]);
-
-  return currentItem;
-};
-
-export const useFetchSchedules = () => {
+export const useFetchSchedules = (azanIsPlaying = false) => {
   const [data, setData] = useState<ScreenItem | undefined>();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const noScheduleInterval = useRef<ReturnType<typeof setInterval>>();
+
   const clearError = () => {
     setError("");
+  };
+
+  const retryLater = () => {
+    noScheduleInterval.current = setInterval(() => {
+      fetchData();
+    }, retryInterval);
   };
 
   const fetchData = async () => {
@@ -32,10 +27,13 @@ export const useFetchSchedules = () => {
       setLoading(true);
       const response = await getFilesListRequest();
       if (response.success) {
+        clearInterval(noScheduleInterval.current);
+
         setData({ ...response.payload!, resetKey: Date.now().toString() });
       } else if (!!data) {
         // to not replay last item
-        setData(undefined)
+        setData(undefined);
+        retryLater();
       }
       setLoading(false);
     } catch (error) {
@@ -44,6 +42,16 @@ export const useFetchSchedules = () => {
       setError("خطا در دریافت اطلاعات");
     }
   };
+
+  useEffect(() => {
+    if (azanIsPlaying) {
+      clearInterval(noScheduleInterval.current);
+    }
+
+    return () => {
+      clearInterval(noScheduleInterval.current);
+    };
+  }, [azanIsPlaying]);
 
   useEffect(() => {
     fetchData();

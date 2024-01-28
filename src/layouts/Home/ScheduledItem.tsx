@@ -8,8 +8,6 @@ type ScheduledItemProps = {
 };
 
 export const ScheduledItem: FC<ScheduledItemProps> = ({ item, onEnd }) => {
-  //   const item = useData(objectId);
-
   return (
     <div
       // variant="outlined"
