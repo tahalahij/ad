@@ -133,6 +133,7 @@ export const Home: FC<HomeProps> = ({ shouldRefetchSchedule }) => {
             const startTime = new Date(t.start);
             return (
               <div
+                key={t.start.toString()}
                 style={{
                   display: "flex",
                   flexDirection: "row",
