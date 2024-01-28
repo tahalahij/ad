@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import Container from "@mui/material/Container";
 import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
@@ -19,9 +18,11 @@ import {
   twoDigitIt,
 } from "../../utils/helpers";
 
-type HomeProps = {};
+type HomeProps = {
+  shouldRefetchSchedule: string; // as reset key
+};
 
-export const Home: FC<HomeProps> = () => {
+export const Home: FC<HomeProps> = ({ shouldRefetchSchedule }) => {
   const [interaction, setInteraction] = useState(false);
   const { data, error, loading, clearError, fetchData } = useFetchSchedules();
   const [currentItem, setCurrentItem] = useState<ScreenItem>();
@@ -45,6 +46,15 @@ export const Home: FC<HomeProps> = () => {
     // }
     fetchData();
   };
+
+  useEffect(() => {
+    if (
+      shouldRefetchSchedule !== "ideal" &&
+      !currentItem?.resetKey?.startsWith("azan")
+    ) {
+      fetchData();
+    }
+  }, [shouldRefetchSchedule]);
 
   const sortedAzanTimes = azanTimes.sort((a, b) => {
     // Turn your strings into dates, and then subtract them
@@ -89,7 +99,8 @@ export const Home: FC<HomeProps> = () => {
             position: "absolute",
             bottom: 0,
             left: 0,
-            backgroundImage: "linear-gradient(rgba(255, 255, 255, 0) 5%, rgb(25, 25, 25) 20%)",
+            backgroundImage:
+              "linear-gradient(rgba(255, 255, 255, 0) 5%, rgb(25, 25, 25) 20%)",
           }}
         />
         <div

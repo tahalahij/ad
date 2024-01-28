@@ -12,14 +12,13 @@ const theme = createTheme({
 });
 
 function App() {
-
-  const isOnline = useSocket();
+  const resetKey = useSocket();
 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         {/* <Header /> */}
-        <Home />
+        <Home shouldRefetchSchedule={resetKey} />
         {/* <Footer /> */}
       </div>
     </ThemeProvider>
