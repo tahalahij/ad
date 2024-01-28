@@ -15,7 +15,7 @@ export const useSocket = () => {
       console.log("connected");
     });
     getSocketInstance().on("SCHEDULE_CREATED", (arg) => {
-      if (arg.schedule.device === deviceId) {
+      if (arg.device === deviceId) {
         setResetKey(Date.now().toString());
       }
     });
@@ -31,7 +31,7 @@ export const useSocket = () => {
     getWhoAmI()
       .then((response) => {
         if (response.success) {
-          // setDeviceId(response.payload.)
+          setDeviceId(response.payload?._id!);
         }
       })
       .catch(console.log);

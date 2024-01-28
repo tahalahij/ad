@@ -10,25 +10,24 @@ export const useFetchSchedules = (azanIsPlaying = false) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const noScheduleInterval = useRef<ReturnType<typeof setInterval>>();
+  const noScheduleInterval = useRef<ReturnType<typeof setTimeout>>();
 
   const clearError = () => {
     setError("");
   };
 
   const retryLater = () => {
-    noScheduleInterval.current = setInterval(() => {
+    noScheduleInterval.current = setTimeout(() => {
       fetchData();
     }, retryInterval);
   };
 
   const fetchData = async () => {
     try {
+      clearTimeout(noScheduleInterval.current);
       setLoading(true);
       const response = await getFilesListRequest();
       if (response.success) {
-        clearInterval(noScheduleInterval.current);
-
         setData({ ...response.payload!, resetKey: Date.now().toString() });
       } else if (!!data) {
         // to not replay last item
@@ -45,11 +44,11 @@ export const useFetchSchedules = (azanIsPlaying = false) => {
 
   useEffect(() => {
     if (azanIsPlaying) {
-      clearInterval(noScheduleInterval.current);
+      clearTimeout(noScheduleInterval.current);
     }
 
     return () => {
-      clearInterval(noScheduleInterval.current);
+      clearTimeout(noScheduleInterval.current);
     };
   }, [azanIsPlaying]);
 
